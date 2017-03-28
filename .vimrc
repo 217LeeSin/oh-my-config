@@ -7,9 +7,11 @@ call plug#begin('~/.vim/plugged')
     Plug 'https://github.com/scrooloose/nerdtree.git', { 'on': 'NERDTreeToggle' }
     Plug 'https://github.com/majutsushi/tagbar.git'
     Plug 'vim-airline/vim-airline-themes'
+    "Plug 'liuchengxu/eleline.vim'
     Plug 'airblade/vim-gitgutter'
     Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
     Plug 'w0rp/ale'
+    Plug 'https://github.com/vim-scripts/a.vim.git', {'for':['c', 'cpp']}
 call plug#end()
 
 
@@ -286,13 +288,13 @@ autocmd BufNewFile * normal G
 
 "--ctags setting--
 " 按下F5重新生成tag文件，并更新taglist
-map <F4> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+"map <F4> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 "imap <F6> <ESC>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
 
 " 打开c相关的文件时自动生成tags文件，BufReadPre 是打开已经存在的文件
 "autocmd BufReadPre *.cpp,*.h,*.c exec ":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>" 
-set tags=tags
-set tags+=./tags 
+"set tags=tags
+"set tags+=./tags 
 
 
 
@@ -373,3 +375,28 @@ endif
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" cscope setting
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if has("cscope")
+  set csprg=/usr/bin/cscope
+  set csto=1
+  set cst
+  set nocsverb
+  " add any database in current directory
+  if filereadable("cscope.out")
+      cs add cscope.out
+  endif
+  set csverb
+endif
+
+nmap <C-@>s :cs find s <C-R>=expand("<cword>")<CR><CR>  
+nmap <C-@>g :cs find g <C-R>=expand("<cword>")<CR><CR>  
+nmap <C-@>c :cs find c <C-R>=expand("<cword>")<CR><CR>  
+nmap <C-@>t :cs find t <C-R>=expand("<cword>")<CR><CR>  
+nmap <C-@>e :cs find e <C-R>=expand("<cword>")<CR><CR>  
+nmap <C-@>f :cs find f <C-R>=expand("<cfile>")<CR><CR>  
+nmap <C-@>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR> 
+nmap <C-@>d :cs find d <C-R>=expand("<cword>")<CR><CR>  
+nmap <C-@>w :w<CR>:!cscope -bqR<CR><CR>  
