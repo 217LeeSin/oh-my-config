@@ -63,12 +63,13 @@ set ruler "在编辑过程中，在右下角显示光标位置的状态行
 """"""""""""""""""""""""""""""""""""""""""""
 "显示文件名：总行数，总的字符数
 "set statusline=[%F]%y%r%m[%{GitBranch()}]%*%=[Line:%l/%L,Column:%c][%p%%] 
+"set statusline=[%F]%y%r%m%*%=[Line:%l/%L,Column:%c][%p%%] 
 
 "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\[HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 
 " 设置insert模式和normal模式的状态栏颜色
-" au InsertEnter * hi StatusLine cterm=none ctermbg=yellow ctermfg=black
-" au InsertLeave * hi StatusLine cterm=none ctermfg=black ctermbg=green 
+au InsertEnter * hi StatusLine cterm=none ctermbg=yellow ctermfg=black
+au InsertLeave * hi StatusLine cterm=none ctermfg=black ctermbg=green 
 
 """""""""""""""""""
 "状态栏的设置 end
@@ -214,9 +215,9 @@ func! CompileRunGcc()
     elseif &filetype == 'python'
         exec "!time python2.7 %"
     elseif &filetype == 'html'
-        exec "!firefox % "
+        exec "!google-chrome % "
     elseif &filetype == 'markdown'
-        exec "!firefox % "
+        exec "!google-chrome % "
     endif
 endfunc
 
@@ -231,9 +232,10 @@ func SetTitle()
 		call setline(1,"\#!/bin/bash") 
 		call append(line("."), "") 
     elseif &filetype == 'python'
-        call setline(1,"#! /usr/bin/env python")
+        call setline(1,"#! /usr/bin/ python3")
         call append(line("."),"# -*- coding: utf-8 -*-")
-	    call append(line(".")+1, "") 
+	    call append(line(".")+1, "")
+        call append(line(".")+2, "__author__ = 'Lee Sin' ")
     elseif &filetype == 'markdown'
         call setline(1,"# ".expand("%"))
 	else 
