@@ -4,6 +4,6 @@
 
 - [x] vim-config
 - [x] awesome-config
-- [] fonts
-- [] bash
-- [] softwares
+- [ ] fonts
+- [ ] bash
+- [ ] softwares
