@@ -7,6 +7,6 @@
 - [ ] fonts
 - [ ] bash
 - [ ] softwares
-- [ ] cvim vim风格快捷键的浏览器插件
-- [ ] vifm vim风格的字符界面文件管理器
+  - [ ] cvim vim风格快捷键的浏览器插件
+  - [ ] vifm vim风格的字符界面文件管理器
   - [ ] zeal 文档查询
