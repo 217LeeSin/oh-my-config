@@ -41,7 +41,7 @@ function parse_git() {
     git_str=$(find_git_branch)    
     if [[ ! -z "$git_str" ]]; then        
         ### now check for git dirty state        
-        git_str="$(git_com_diff) ${git_str}$(find_git_dirty)"
+        git_str="$(git_com_diff)${git_str}$(find_git_dirty)"
         
         ### add git stats if applicable
         git_str="${git_str}$(find_git_stats)"  
@@ -95,6 +95,8 @@ function git_com_diff() {
     fi    
     echo $gupdown
 }    
+
+
 
 #############################
 function find_git_stats() {                   	     
@@ -242,6 +244,8 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias git='LANG=en_GB git'
+
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -266,3 +270,5 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+
