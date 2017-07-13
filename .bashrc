@@ -9,6 +9,11 @@ fi
 #	. ~/.bashrc
 #fi
 
+#if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+#    debian_chroot=$(cat /etc/debian_chroot)
+#fi
+
+
 #############################
 function find_git_branch() {
   local branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
@@ -147,7 +152,6 @@ function find_git_stats() {
 }
      
 
-
 # User specific aliases and functions
 HISTSIZE=5000
 HISTFILESIZE=10000
@@ -161,10 +165,14 @@ function prompt_command() {
         ###################################################
         ### set an error string for the prompt, if applicable
         if [ $? -eq 0 ]; then 
-                ERRPROMPT="\[\033[1;5;32m\]$ "
+                ERRPROMPT="\[\033[1;5;34m\]✔ "
+                COMMANDID="\[\033[1;5;34m\]"
         else
-                ERRPROMPT='\[\033[1;5;31m\]X '
+                ERRPROMPT='\[\033[1;5;31m\]✘ '
+                COMMANDID="\[\033[1;5;31m\]"
         fi  
+
+        #timer_stop
 
         local MORANGE="\[\033[38;5;202m\]"
         local DORANGE="\[\033[38;5;221m\]"
@@ -198,20 +206,32 @@ function prompt_command() {
         
 
         local TXTCOL="${HIGreen}"
-
+        local USERPROMPT="\[\033[1;5;32m\]$ "
        if [[ $(id -u) -eq 0 ]]; then  
                 ### root color
-                local BARCOL="${MORANGE}"
                 local TXTCOL="${RED}"           
+                local USERPROMPT="\[\033[1;5;31m\]# "
         fi # root bit         
 
-        
+
+rightprompt()
+{
+    printf "%*s" $COLUMNS $(get_git_commid)
+}
+
+
+
+
 PS1="${debian_chroot:+($debian_chroot)}\n\
-${TXTCOL}⌚ ⌚ ⌚ `date +"%H:%M"` ➟ \
+${MORANGE}\[$(tput sc; rightprompt; tput rc)\]\
+${COMMANDID}№ \#/ttyp\l \
+${TXTCOL}⌚ \A \
+➟ \
 ${YELLOW}\w \
 $(parse_git)
-${TXTCOL}☠ ☠ ☠ \
-${TXTCOL}\u ➟ " 
+${ERRPROMPT}${TXTCOL}\u@\h:\
+${USERPROMPT}${TXTCOL}"  
+
 }
 
 
@@ -256,3 +276,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+
+
