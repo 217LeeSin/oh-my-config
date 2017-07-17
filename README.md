@@ -10,3 +10,4 @@
   - [x] cvim vim快捷键风格的浏览器插件
   - [ ] vifm vim风格的字符界面文件管理器
   - [ ] zeal 文档查询
+  - [ ] zathura PDF阅读器

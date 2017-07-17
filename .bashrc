@@ -278,4 +278,4 @@ if ! shopt -oq posix; then
 fi
 
 
-
+bind "set completion-ignore-case on"

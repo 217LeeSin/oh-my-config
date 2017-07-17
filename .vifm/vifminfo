@@ -1,0 +1,272 @@
+# You can edit this file by hand, but it's recommended not to do that.
+
+# Marks:
+'H
+	/home/emind/
+	..
+1494382298
+'b
+	/home/emind/bin/
+	..
+1494382298
+'h
+	/home/emind/
+	..
+1494382298
+'z
+	/home/emind/.vifm
+	..
+1494382298
+
+# TUI:
+al
+q0
+v1
+oh
+m-1
+l2
+r2
+
+# Left window history (oldest to newest):
+d/home/emind
+	../
+0
+d/home
+	emind/
+1
+d/
+	media/
+9
+d/media
+	emind/
+1
+d/media/emind
+	7AE72F1C3A5DF187/
+1
+d/media/emind/7AE72F1C3A5DF187
+	5-6/
+1
+d/media/emind/7AE72F1C3A5DF187/5-6
+	data/
+1
+d/media/emind/7AE72F1C3A5DF187/5-6/data
+	zsh-config/
+15
+d/media/emind/7AE72F1C3A5DF187/5-6
+	data/
+1
+d/media/emind/7AE72F1C3A5DF187/5-6/data
+	zsh-config/
+15
+d/media/emind/7AE72F1C3A5DF187/5-6
+	data/
+1
+d/media/emind/7AE72F1C3A5DF187
+	5-6/
+1
+d/media/emind
+	7AE72F1C3A5DF187/
+1
+d/media
+	emind/
+1
+d/
+	run/
+14
+d/run
+	../
+0
+d/
+	dev
+3
+d/dev
+	..
+0
+d/
+	boot
+1
+d/home/emind
+	Downloads
+3
+d/home/emind/Downloads
+	PlayWithDataStructureSourceCode
+1
+d/home/emind/Downloads/PlayWithDataStructureSourceCode
+	╡┌4╒┬╒╗╙ы╢╙┴╨
+2
+d/home/emind/Downloads
+	PlayWithDataStructureSourceCode
+1
+d/home/emind
+	tmp
+14
+d/home/emind/tmp
+	awesome-copycats
+3
+d/home/emind/tmp/awesome-copycats
+	freedesktop
+1
+d/home/emind/tmp/awesome-copycats/freedesktop
+	..
+0
+d/home/emind/tmp/awesome-copycats
+	freedesktop
+1
+d/home/emind/tmp
+	awesome-copycats
+3
+d/home/emind
+	data
+11
+d/home/emind/data
+	..
+0
+d/home/emind
+	data
+11
+d/home/emind/data
+	oh-my-config
+1
+d/home/emind/data/oh-my-config
+	..
+0
+d/home/emind/data
+	oh-my-config
+1
+d/home/emind/data/oh-my-config
+	..
+0
+d/home/emind/data
+	oh-my-config
+1
+d/home/emind
+	screenshots
+12
+d/home/emind/screenshots
+	..
+0
+d/home/emind
+	Desktop
+1
+d/home/emind/Desktop
+	..
+0
+d/home/emind
+	Documents
+2
+d/home/emind/Documents
+	..
+0
+d/home/emind
+	Downloads
+3
+d/home/emind/Downloads
+	c01119894.pdf
+13
+d/home/emind
+	Videos
+10
+d/home/emind/Videos
+	..
+0
+d/home/emind
+	Videos
+10
+d/home/emind/Videos
+	..
+0
+d/home/emind
+	data
+11
+d/home/emind/data
+	oh-my-config
+1
+d/home/emind
+	software
+13
+d/home/emind/software
+	..
+0
+d/home/emind
+	tmp
+14
+d/home/emind/tmp
+	__MACOSX
+2
+d/home/emind/tmp/__MACOSX
+	python_captcha
+1
+d/home/emind/tmp/__MACOSX/python_captcha
+	examples
+1
+d/home/emind/tmp/__MACOSX/python_captcha/examples
+	..
+0
+d/home/emind/tmp/__MACOSX/python_captcha
+	examples
+1
+d/home/emind/tmp/__MACOSX
+	python_captcha
+1
+d/home/emind/tmp
+	__MACOSX
+2
+d/home/emind
+	tmp
+14
+d/home/emind/tmp
+	python
+10
+d
+
+# Right window history (oldest to newest):
+D/home/emind
+	Desktop
+1
+D/home/emind/Desktop
+	..
+0
+D/home/emind
+	Documents
+2
+D/home/emind/Documents
+	..
+0
+D/home/emind
+	Downloads
+3
+D/home/emind/Downloads
+	..
+0
+D
+
+# Command line history (oldest to newest):
+:w
+:wq
+:q
+
+# Search history (oldest to newest):
+
+# Prompt history (oldest to newest):
+
+# Local filter history (oldest to newest):
+
+# Registers:
+""/home/emind/.vifm/Trash/000_test.sh
+
+# Directory stack (oldest to newest):
+
+# Trash content:
+t/home/emind/.vifm/Trash/000_test.sh
+	/home/emind/tmp/test.sh
+
+# State:
+f
+i1
+[.1
+[F
+F
+I1
+].1
+]F
+s0
