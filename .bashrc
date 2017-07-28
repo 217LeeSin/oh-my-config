@@ -1,17 +1,29 @@
 # .bashrc
 
 # Source global definitions
-if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
-fi
+#if [ -f /etc/bashrc ]; then
+#	. /etc/bashrc
+#fi
+#
+
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+HISTCONTROL=ignoreboth
 
 #if [ -f ~/.bashrc ]; then
 #	. ~/.bashrc
 #fi
 
-#if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-#    debian_chroot=$(cat /etc/debian_chroot)
-#fi
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+
 
 
 #############################
@@ -53,7 +65,8 @@ function parse_git() {
         
         ### add short commitid string
         #git_str="${git_str}$(get_git_commid)"
-        git_str="${MORANGE}⌥ (${git_str}${MORANGE} )"  
+        git_str="${MORANGE}⎇ (${git_str}${MORANGE} )"  
+        #git_str="${MORANGE}♆(${git_str}${MORANGE} )"  
                             
         ### Final echo that PS prompt sees 
         echo $git_str
@@ -152,6 +165,8 @@ function find_git_stats() {
 }
      
 
+
+
 # User specific aliases and functions
 HISTSIZE=5000
 HISTFILESIZE=10000
@@ -212,30 +227,51 @@ function prompt_command() {
                 local TXTCOL="${RED}"           
                 local USERPROMPT="\[\033[1;5;31m\]# "
         fi # root bit         
+        
+        if test -z "$VIRTUAL_ENV" ; then
+              PYTHON_VIRTUALENV=""
+          else
+              PYTHON_VIRTUALENV="${DKGRAY}(env:`basename \"$VIRTUAL_ENV\"`)"
+          fi
 
 
-rightprompt()
+rightprompt-git()
 {
     printf "%*s" $COLUMNS $(get_git_commid)
 }
 
+rightprompt-time()
+{
+    printf "%*s" $COLUMNS `date +"%H:%M"`
+}
 
 
 
-PS1="${debian_chroot:+($debian_chroot)}\n\
-${MORANGE}\[$(tput sc; rightprompt; tput rc)\]\
-${COMMANDID}№ \#/ttyp\l \
-${TXTCOL}⌚ \A \
-➟ \
-${YELLOW}\w \
+
+#PS1="${debian_chroot:+($debian_chroot)}\
+#${MORANGE}\[$(tput sc; rightprompt; tput rc)\]\
+#${COMMANDID}№ \#/ttyp\l \
+#${TXTCOL}⌚ \A \
+#➟ \
+#${YELLOW}\w \
+#$(parse_git)
+#${ERRPROMPT}${TXTCOL}\u@\h:\
+#${USERPROMPT}${TXTCOL}"  
+#
+
+
+export PS1="${debian_chroot:+($debian_chroot)}\
+${TXTCOL}\u@\h ${GRAY}in ${YELLOW}\w \
+${PYTHON_VIRTUALENV}\
 $(parse_git)
-${ERRPROMPT}${TXTCOL}\u@\h:\
-${USERPROMPT}${TXTCOL}"  
+${TXTCOL}↪ ${TXTCOL}"
+
 
 }
 
 
-PROMPT_COMMAND="prompt_command; history -a; history -c; history -r"
+export PROMPT_COMMAND="prompt_command; history -a; history -c; history -r"
+#export PROMPT_COMMAND="prompt_command"
 #
 
 else
@@ -266,6 +302,13 @@ alias la='ls -A'
 alias l='ls -CF'
 alias git='LANG=en_GB git'
 
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -277,5 +320,16 @@ if ! shopt -oq posix; then
   fi
 fi
 
-
+# 输入忽略大小写
 bind "set completion-ignore-case on"
+
+# virtualenvwrapper配置
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/Devel
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+source ~/.local/bin/virtualenvwrapper.sh
+
+# qt5启动文件配置
+export QTDIR=/home/emind/software/Qt5.7.0/5.7/gcc_64
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${QTDIR}/lib
+export PATH=${QTDIR}/bin:${PATH}
