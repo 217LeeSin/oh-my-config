@@ -6,6 +6,7 @@
 - [x] awesome-config
 - [x] fonts
 - [x] bash
+- [x] ss-qt5
 - [ ] softwares
   - [x] cvim vim快捷键风格的浏览器插件
   - [ ] vifm vim风格的字符界面文件管理器
