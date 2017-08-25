@@ -5,9 +5,9 @@ call plug#begin('~/.vim/plugged')
     Plug 'https://github.com/lilydjwg/fcitx.vim'
     Plug 'https://github.com/Shougo/neocomplete.vim.git'
     Plug 'https://github.com/scrooloose/nerdtree.git', { 'on': 'NERDTreeToggle' }
+    Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
     Plug 'https://github.com/majutsushi/tagbar.git'
     Plug 'vim-airline/vim-airline-themes'
-    "Plug 'liuchengxu/eleline.vim'
     Plug 'airblade/vim-gitgutter'
     Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
     Plug 'w0rp/ale'
@@ -32,8 +32,8 @@ set showmatch " 设置匹配模式，当属于一个左括号时会匹配相应�
 set expandtab               " 使用空格来替换tab
 set smarttab                " 开启新行时使用智能 tab 缩进
 
-set autoindent  " 启用自动对齐功能，把上一行的对齐格式应用到下一行
-set smartindent " 依据上面的格式，智能的选择对齐方式，对于类似C语言编写很有用处
+"set autoindent  " 启用自动对齐功能，把上一行的对齐格式应用到下一行
+"set smartindent " 依据上面的格式，智能的选择对齐方式，对于类似C语言编写很有用处
 
 set lazyredraw  " 解决某些类型的文件由于syntax导致vim反应过慢的问题
 set ttyfast		" 平滑地变化
@@ -42,6 +42,10 @@ set cc=80       " 第80字符处显示分隔符
 
 " 自动重新读入
 set autoread                " 当文件在外部被修改，自动更新该文件
+" 自动保存
+let autosave=5
+
+autocmd CursorHold,CursorHoldI * update
 
 
 " 备份与缓存
@@ -52,6 +56,11 @@ set writebackup             " 设置无备份文件
 
 "搜索时高亮现实被找到的文本
 set hlsearch
+"搜索不区分大小写
+set ignorecase
+" 如果有一个大写字母，则切换到大小写敏感查找
+set smartcase
+
 
 " 状态栏
 set laststatus=2  " 总是显示状态栏
@@ -68,8 +77,8 @@ set ruler "在编辑过程中，在右下角显示光标位置的状态行
 "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\[HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 
 " 设置insert模式和normal模式的状态栏颜色
-au InsertEnter * hi StatusLine cterm=none ctermbg=yellow ctermfg=black
-au InsertLeave * hi StatusLine cterm=none ctermfg=black ctermbg=green 
+"au InsertEnter * hi StatusLine cterm=none ctermbg=yellow ctermfg=black
+"au InsertLeave * hi StatusLine cterm=none ctermfg=black ctermbg=green 
 
 """""""""""""""""""
 "状态栏的设置 end
@@ -104,6 +113,22 @@ set helplang=cn
 " python和c语言规定一行不超过80个字符，当超过时用下划线标出
 au BufRead,BufNewFile *.c,*.cpp,*.py 2match Underlined /.\%81v/
 
+
+colorscheme molokai
+"set mouse=a
+
+
+if has('gui_running')
+    set guioptions-=m " 隐藏菜单栏
+    set guioptions-=T " 隐藏工具栏
+    set guioptions-=L " 隐藏左侧滚动条
+    set guioptions-=r " 隐藏右侧滚动条
+    set guioptions-=b " 隐藏底部滚动条
+    set showtabline=0 " 隐藏Tab栏
+    colorscheme molokai
+    set guifont=Source\ Code\ Pro\ for\ Powerline\ Regular\ 11
+    set mouse=a
+endif
 
 
 " 按键设置
@@ -151,6 +176,27 @@ map <C-l> <C-W>l
 "set listchars=tab:➢\ ,trail:·,eol:⏎,precedes:«,extends:»
 
 
+let g:NERDTreeWinPos="left"
+let g:NERDTreeShowLineNumbers=1
+let NERDTreeChDirMode=2     " 设置当前目录为nerdtree的起始目录
+let NERDChristmasTree=1     " 使得窗口有更好看的效果
+let NERDTreeMouseMode=1     " 双击鼠标左键打开文件
+let NERDTreeWinSize=25      " 设置窗口宽度为25
+let NERDTreeQuitOnOpen=1    " 打开一个文件时nerdtree分栏自动关闭
+
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ 'Ignored'   : '☒',
+    \ "Unknown"   : "?"
+    \ }
+
 
 " ale设置
 " ale是异步语法检查工具，只能用于vim8.0 +版本
@@ -165,6 +211,9 @@ let g:ale_linters = {
     \}
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 
+
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 
 " 设置fcitx.vim 的延时,否则会有明显的卡顿
@@ -215,9 +264,9 @@ func! CompileRunGcc()
     elseif &filetype == 'python'
         exec "!time python2.7 %"
     elseif &filetype == 'html'
-        exec "!google-chrome % "
+        exec "!opera % "
     elseif &filetype == 'markdown'
-        exec "!google-chrome % "
+        exec "!opera % "
     endif
 endfunc
 
@@ -235,7 +284,6 @@ func SetTitle()
         call setline(1,"#! /usr/bin/ python3")
         call append(line("."),"# -*- coding: utf-8 -*-")
 	    call append(line(".")+1, "")
-        call append(line(".")+2, "__author__ = 'Lee Sin' ")
     elseif &filetype == 'markdown'
         call setline(1,"# ".expand("%"))
 	else 
@@ -402,3 +450,5 @@ nmap <C-@>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
 nmap <C-@>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR> 
 nmap <C-@>d :cs find d <C-R>=expand("<cword>")<CR><CR>  
 nmap <C-@>w :w<CR>:!cscope -bqR<CR><CR>  
+
+

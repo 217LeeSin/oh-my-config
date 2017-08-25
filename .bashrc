@@ -333,3 +333,53 @@ source ~/.local/bin/virtualenvwrapper.sh
 export QTDIR=/home/emind/software/Qt5.7.0/5.7/gcc_64
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${QTDIR}/lib
 export PATH=${QTDIR}/bin:${PATH}
+
+
+
+# goto 快速切换目录
+pushd() {
+    if [ $# -eq 0 ]; then
+        DIR="${HOME}"
+    else
+        DIR="$1"
+    fi
+
+    builtin pushd "${DIR}" > /dev/null
+}
+
+alias cd='pushd'
+
+dirs() {
+    tmphash="/tmp/.dirs"
+
+    builtin dirs -p | awk '{
+        if (a[$1]=="") a[$1]=NR;
+        if (length(a)==10) exit
+    }END{for(i in a) print a[i],i}' |
+    sort -nk1 | cut -d' ' -f2- > $tmphash
+
+    nl $tmphash
+}
+
+goto() {
+    tmphash="/tmp/.dirs"
+    if [ ! -f $tmphash ]; then
+        echo "no record"
+        return 1
+    fi
+    if [ $# -eq 0 ]; then
+        return 1
+    fi
+
+    dest=`awk -v n=$1 'NR==n&&1' $tmphash`
+
+    if [[ $dest == "~" ]]; then
+        dest=${HOME}
+    elif [[ $dest == "~/"* ]]; then
+        dest="${HOME}/${dest:2}"
+    elif [[ $dest == "~"* ]]; then
+        dest=`eval "echo $dest"`
+    fi
+
+    pushd $dest
+}
