@@ -383,3 +383,23 @@ goto() {
 
     pushd $dest
 }
+
+
+mkdir -p ~/.Trash
+alias rm=trash
+alias r=trash
+alias rl='ls ~/.Trash'
+alias ur=undelfile
+undelfile()
+{
+  mv -i ~/.Trash/$@ ./
+}
+trash()
+{
+  mv $@ ~/.Trash/
+}
+cleartrash()
+{
+    read -p "clear sure?[n]" confirm
+    [ $confirm == 'y' ] || [ $confirm == 'Y' ]  && /usr/bin/rm -rf ~/.Trash/*
+}
