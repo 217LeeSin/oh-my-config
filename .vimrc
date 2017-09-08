@@ -12,6 +12,13 @@ call plug#begin('~/.vim/plugged')
     Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
     Plug 'w0rp/ale'
     Plug 'https://github.com/vim-scripts/a.vim.git', {'for':['c', 'cpp']}
+    Plug 'https://github.com/tomasr/molokai'
+    Plug 'https://github.com/davidhalter/jedi-vim', {'for': 'python'}
+    Plug 'mhinz/vim-startify'
+    Plug 'https://github.com/easymotion/vim-easymotion'
+    Plug 'MattesGroeger/vim-bookmarks'
+    Plug 'https://github.com/vim-scripts/YankRing.vim'
+    Plug 'wakatime/vim-wakatime'
 call plug#end()
 
 
@@ -43,7 +50,7 @@ set cc=80       " 第80字符处显示分隔符
 " 自动重新读入
 set autoread                " 当文件在外部被修改，自动更新该文件
 " 自动保存
-let autosave=5
+let autosave=2
 
 autocmd CursorHold,CursorHoldI * update
 
@@ -117,7 +124,13 @@ au BufRead,BufNewFile *.c,*.cpp,*.py 2match Underlined /.\%81v/
 colorscheme molokai
 "set mouse=a
 
+" 在普通和可视模式下禁用方向键
+map <Left> <Nop>
+map <Right> <Nop>
+map <Up> <Nop>
+map <Down> <Nop>
 
+" gvim设置
 if has('gui_running')
     set guioptions-=m " 隐藏菜单栏
     set guioptions-=T " 隐藏工具栏
@@ -131,27 +144,16 @@ if has('gui_running')
 endif
 
 
-" 按键设置
-nmap <silent> <F2> :NERDTreeToggle  <CR>
-let g:NERDTreeWinPos="left"
-let g:NERDTreeWinSize=20
-let g:NERDTreeShowLineNumbers=1
-let g:neocomplcache_enable_at_startup = 1 
 
-nmap <silent> <F3> :TagbarToggle<CR>  
-let g:tagbar_ctags_bin = 'ctags'  
-let g:tagbar_width = 20
-
-
-"设置折叠方式(manual, indent, expr, syntax, diff, marker)
-"zc 折叠
-"zo 展开折叠
-"[z 到当前打开的折叠的开始处
-"]z 到当前打开的折叠的末尾处
-"zj 向下移动到下一个折叠的开始处
-"zk 向下移动到前一个折叠的结束处
-"zm 折叠所有
-"zr 打开所有折叠
+" 设置折叠方式(manual, indent, expr, syntax, diff, marker)
+" zc 折叠
+" zo 展开折叠
+" [z 到当前打开的折叠的开始处
+" ]z 到当前打开的折叠的末尾处
+" zj 向下移动到下一个折叠的开始处
+" zk 向下移动到前一个折叠的结束处
+" zm 折叠所有
+" zr 打开所有折叠
 set foldmethod=syntax
 setlocal foldlevel=1        " 设置折叠层数为10
 " set foldclose=all           " 设置为自动关闭折叠                            
@@ -176,6 +178,26 @@ map <C-l> <C-W>l
 "set listchars=tab:➢\ ,trail:·,eol:⏎,precedes:«,extends:»
 
 
+
+""""""""""""""""""""""""""""""
+" Tagbar settings
+""""""""""""""""""""""""""""""
+
+nmap <silent> <F3> :TagbarToggle<CR>  
+let g:tagbar_ctags_bin = 'ctags'  
+let g:tagbar_width = 20
+
+
+""""""""""""""""""""""""""""""
+" NERDTree settings
+""""""""""""""""""""""""""""""
+
+nmap <silent> <F2> :NERDTreeToggle  <CR>
+let g:NERDTreeWinPos="left"
+let g:NERDTreeWinSize=20
+let g:NERDTreeShowLineNumbers=1
+let g:neocomplcache_enable_at_startup = 1 
+
 let g:NERDTreeWinPos="left"
 let g:NERDTreeShowLineNumbers=1
 let NERDTreeChDirMode=2     " 设置当前目录为nerdtree的起始目录
@@ -198,20 +220,20 @@ let g:NERDTreeIndicatorMapCustom = {
     \ }
 
 
-" ale设置
-" ale是异步语法检查工具，只能用于vim8.0 +版本
+"""""""""""""""""""""""""""""""""""
+" ale settings requests:vim8.0
+"""""""""""""""""""""""""""""""""""
+" ctrl+j jump to next wrap
+" ctrl+k jump to previous wrap
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-
 let g:ale_linters = {
     \   'cpp': ['g++'],
     \   'c': ['gcc'],
     \   'python': ['flake8'], 
     \}
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
-
-
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
@@ -221,8 +243,9 @@ set ttimeoutlen=10
 
 
 
-
-" airline 设置
+"""""""""""""""""""""""""""""""""""
+" airline settings
+"""""""""""""""""""""""""""""""""""
 let g:airline_theme='powerlineish'  
 " 使用powerline打过补丁的字体  
 let g:airline_powerline_fonts=1  
@@ -240,8 +263,6 @@ let g:airline_right_alt_sep = ''
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
-
-
 
 
 """"""""""""""""""""""
@@ -276,7 +297,6 @@ endfunc
 autocmd BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py exec ":call SetTitle()" 
 " 定义函数SetTitle，自动插入文件头 
 func SetTitle() 
-	" 如果文件类型为.sh文件 
 	if &filetype == 'sh' 
 		call setline(1,"\#!/bin/bash") 
 		call append(line("."), "") 
@@ -409,7 +429,7 @@ inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 "autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 "autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 "autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType python3 setlocal omnifunc=jedi#Complete
 "autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 "
 " Enable heavy omni completion.
@@ -425,10 +445,33 @@ endif
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 
+"""""""""""""""""""""""""""""""""
+" jedi-vim
+"""""""""""""""""""""""""""""""""
+let g:neocomplete#enable_auto_select = 0
+let g:jedi#popup_select_first=0
+set completeopt=longest,menuone
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#popup_on_dot = 0
+if !exists('g:neocomplete#force_omni_input_patterns')
+        let g:neocomplete#force_omni_input_patterns = {}
+endif
+let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\)\w*'
+let g:jedi#show_call_signatures = "0"   " 补全时不弹出函数的参数列表框
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " cscope setting
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 0 或 s	查找本 C 符号(可以跳过注释)
+" 1 或 g	查找本定义
+" 2 或 d	查找本函数调用的函数
+" 3 或 c	查找调用本函数的函数
+" 4 或 t	查找本字符串
+" 6 或 e	查找本 egrep 模式
+" 7 或 f	查找本文件
+" 8 或 i	查找包含本文件的文件
+" find . –name "*.py" > cscope.files cscope生成python文件的索引
 if has("cscope")
   set csprg=/usr/bin/cscope
   set csto=1
@@ -452,3 +495,51 @@ nmap <C-@>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 nmap <C-@>w :w<CR>:!cscope -bqR<CR><CR>  
 
 
+""""""""""""""""""""""""""""
+" easymotion settings
+""""""""""""""""""""""""""""
+" \l 当前位置向右行内搜索
+" \j 当前位置向下多行搜索
+" \k 当前位置向上多行搜索
+" \h 当前位置向左行内搜索
+" \s 全文关键字搜索
+map <Leader> <Plug>(easymotion-prefix)
+map <Leader>l <Plug>(easymotion-lineforward)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
+map <Leader>s <Plug>(easymotion-s)
+let g:EasyMotion_smartcase = 1
+
+
+""""""""""""""""""""""""""""
+" vim-bookmarks settings
+""""""""""""""""""""""""""""
+" 添加/删除书签(当前行)	mm	:BookmarkToggle
+" 添加/编辑/删除当前行注释书签	mi	:BookmarkAnnotate <TEXT>
+" 跳转到当前 buffer 的下一个书签	mn	:BookmarkNext
+" 跳转到当前 buffer 的前一个书签	mp	:BookmarkPrev
+" 在 quickfix 窗口中列出所有书签(toggle)	ma	:BookmarkShowAll
+" 清除当前 buffer 内的所有书签	mc	:BookmarkClear
+" 清除所有 buffer 内的书签	mx	:BookmarkClearAll
+" 保存书签到文件		:BookmarkSave <FILE_PATH>
+" 从文件加载书签		:BookmarkLoad <FILE_PATH>
+let g:bookmark_save_per_working_dir = 1
+let g:bookmark_auto_save = 0
+let g:bookmark_auto_close = 1
+let g:bookmark_show_warning = 0
+let g:bookmark_center = 1
+
+
+""""""""""""""""""""""""""""
+" wakatime settings
+""""""""""""""""""""""""""""
+let g:wakatime_PythonBinary = '/usr/bin/python'
+
+
+""""""""""""""""""""""""""""
+" wakatime settings
+""""""""""""""""""""""""""""
+let g:yankring_history_dir = $HOME.'/.vim/'
+let g:yankring_history_file = '.yankring_history'
+nnoremap <silent> <F4> :YRShow<CR>
