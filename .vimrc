@@ -1,4 +1,4 @@
-" vim-plug
+"vim-plug
 call plug#begin('~/.vim/plugged') 
     Plug 'vim-airline/vim-airline' 
     Plug 'mattn/emmet-vim', {'for': 'html'} 
@@ -19,6 +19,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'MattesGroeger/vim-bookmarks'
     Plug 'https://github.com/vim-scripts/YankRing.vim'
     Plug 'wakatime/vim-wakatime'
+    Plug 'terryma/vim-multiple-cursors'
+    Plug 'Konfekt/FastFold'
 call plug#end()
 
 
@@ -178,6 +180,11 @@ map <C-l> <C-W>l
 "set listchars=tab:➢\ ,trail:·,eol:⏎,precedes:«,extends:»
 
 
+" 自动切换到当前目录
+set autochdir
+autocmd BufEnter * silent! !cd %:p:h
+
+
 
 """"""""""""""""""""""""""""""
 " Tagbar settings
@@ -194,28 +201,24 @@ let g:tagbar_width = 20
 
 nmap <silent> <F2> :NERDTreeToggle  <CR>
 let g:NERDTreeWinPos="left"
-let g:NERDTreeWinSize=20
-let g:NERDTreeShowLineNumbers=1
-let g:neocomplcache_enable_at_startup = 1 
-
-let g:NERDTreeWinPos="left"
 let g:NERDTreeShowLineNumbers=1
 let NERDTreeChDirMode=2     " 设置当前目录为nerdtree的起始目录
 let NERDChristmasTree=1     " 使得窗口有更好看的效果
 let NERDTreeMouseMode=1     " 双击鼠标左键打开文件
 let NERDTreeWinSize=25      " 设置窗口宽度为25
 let NERDTreeQuitOnOpen=1    " 打开一个文件时nerdtree分栏自动关闭
+let NERDTreeIgnore=['\.pyc','\~$','\.swp']
 
 let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "✖",
+    \ "Modified"  : "M",
+    \ "Staged"    : "A",
+    \ "Untracked" : "U",
+    \ "Renamed"   : ">",
+    \ "Unmerged"  : "=",
+    \ "Deleted"   : "D",
     \ "Dirty"     : "✗",
     \ "Clean"     : "✔︎",
-    \ 'Ignored'   : '☒',
+    \ 'Ignored'   : "~",
     \ "Unknown"   : "?"
     \ }
 
@@ -255,6 +258,17 @@ endif
 " 关闭空白符检测  
 let g:airline#extensions#whitespace#enabled=0
 
+
+"打开tabline功能,方便查看Buffer和切换,省去了minibufexpl插件
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+"设置切换Buffer快捷键"
+nmap <C-Tab> :bn<CR>
+nmap <C-S-Tab> :bp<CR>
+
+
 " powerline symbols
 let g:airline_left_sep = ''
 let g:airline_left_alt_sep = ''
@@ -283,7 +297,7 @@ func! CompileRunGcc()
     elseif &filetype == 'sh'
         :!time bash %
     elseif &filetype == 'python'
-        exec "!time python2.7 %"
+        exec "!time python3 %"
     elseif &filetype == 'html'
         exec "!opera % "
     elseif &filetype == 'markdown'
@@ -456,7 +470,7 @@ let g:jedi#popup_on_dot = 0
 if !exists('g:neocomplete#force_omni_input_patterns')
         let g:neocomplete#force_omni_input_patterns = {}
 endif
-let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\)\w*'
+" let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\)\w*'
 let g:jedi#show_call_signatures = "0"   " 补全时不弹出函数的参数列表框
 
 
@@ -543,3 +557,17 @@ let g:wakatime_PythonBinary = '/usr/bin/python'
 let g:yankring_history_dir = $HOME.'/.vim/'
 let g:yankring_history_file = '.yankring_history'
 nnoremap <silent> <F4> :YRShow<CR>
+
+
+""""""""""""""""""""""""""""
+" vim-multiple-cursors settings
+""""""""""""""""""""""""""""
+let g:multi_cursor_use_default_mapping=0
+" Default mapping
+let g:multi_cursor_next_key='<C-m>'
+let g:multi_cursor_prev_key='<C-p>'
+let g:multi_cursor_skip_key='<C-x>'
+let g:multi_cursor_quit_key='<Esc>'
+
+
+
