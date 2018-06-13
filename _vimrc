@@ -1,27 +1,31 @@
-"vim-plug
-call plug#begin('~/.vim/plugged') 
-    Plug 'vim-airline/vim-airline' 
-    Plug 'mattn/emmet-vim', {'for': 'html'} 
-    Plug 'https://github.com/lilydjwg/fcitx.vim'
+call plug#begin('~/vimfiles/plugged') 
     Plug 'https://github.com/Shougo/neocomplete.vim.git'
     Plug 'https://github.com/scrooloose/nerdtree.git', { 'on': 'NERDTreeToggle' }
     Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
-    Plug 'https://github.com/majutsushi/tagbar.git'
-    Plug 'vim-airline/vim-airline-themes'
     Plug 'airblade/vim-gitgutter'
     Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
     Plug 'w0rp/ale'
-    Plug 'https://github.com/vim-scripts/a.vim.git', {'for':['c', 'cpp']}
     Plug 'https://github.com/tomasr/molokai'
     Plug 'https://github.com/davidhalter/jedi-vim', {'for': 'python'}
     Plug 'mhinz/vim-startify'
-    Plug 'https://github.com/easymotion/vim-easymotion'
+	Plug 'https://github.com/easymotion/vim-easymotion'
     Plug 'MattesGroeger/vim-bookmarks'
     Plug 'https://github.com/vim-scripts/YankRing.vim'
     Plug 'terryma/vim-multiple-cursors'
     Plug 'Konfekt/FastFold'
+	Plug 'liuchengxu/eleline.vim'
 call plug#end()
 
+
+" gvim设置
+if has('gui_running')
+    set guioptions-=m " 隐藏菜单栏
+    set guioptions-=T " 隐藏工具栏
+    set guioptions-=L " 隐藏左侧滚动条
+    set guioptions-=r " 隐藏右侧滚动条
+    set guioptions-=b " 隐藏底部滚动条
+    set showtabline=0 " 隐藏Tab栏
+endif
 
 " 设置vim默认的编码格式(utf-8)和可支持的编码格式(utf-8,GBK，其他的编码可以在后面增加)
 set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936
@@ -34,25 +38,37 @@ set relativenumber "显示相对行号
 set tabstop=4 " 一个tab键所跨过的空格数 
 set softtabstop=4  " 输入tab键时实际占有的列数
 set shiftwidth=4   " reindent 操作（<<和>>）时缩进的列数
-
 set showmatch " 设置匹配模式，当属于一个左括号时会匹配相应的那个右括号
 
-set expandtab               " 使用空格来替换tab
-set smarttab                " 开启新行时使用智能 tab 缩进
+"------------Gvim中文菜单乱码解决方案-------------
+" 设置文件编码格式
+set encoding=utf-8
+set fileencodings=utf-8,chinese,latin-1,gbk,gb18030,gk2312
+set fileencoding=utf-8
 
-"set autoindent  " 启用自动对齐功能，把上一行的对齐格式应用到下一行
-"set smartindent " 依据上面的格式，智能的选择对齐方式，对于类似C语言编写很有用处
+"解决菜单乱码 删除菜单，再重新添加菜单，vim会按照之前设定的编码格式创建菜单栏
+source $VIMRUNTIME/delmenu.vim
+source $VIMRUNTIME/menu.vim
+
+"解决consle提示信息输出乱码
+language messages zh_CN.utf-8
+
+set nocompatible
+set backspace=indent,eol,start 
 
 set lazyredraw  " 解决某些类型的文件由于syntax导致vim反应过慢的问题
 set ttyfast		" 平滑地变化
 set cc=80       " 第80字符处显示分隔符
 
+" 设置窗口大小
+set lines=35 columns=118
+" 设置字体
+set guifont=Lucida\ Console:h12
 
 " 自动重新读入
 set autoread                " 当文件在外部被修改，自动更新该文件
 " 自动保存
 let autosave=2
-
 autocmd CursorHold,CursorHoldI * update
 
 
@@ -75,23 +91,6 @@ set laststatus=2  " 总是显示状态栏
 set ruler "在编辑过程中，在右下角显示光标位置的状态行
 
 
-""""""""""""""""""""""""""""""""""""""""""""
-"状态栏的设置，在不使用airline时显示的状态栏
-""""""""""""""""""""""""""""""""""""""""""""
-"显示文件名：总行数，总的字符数
-"set statusline=[%F]%y%r%m[%{GitBranch()}]%*%=[Line:%l/%L,Column:%c][%p%%] 
-"set statusline=[%F]%y%r%m%*%=[Line:%l/%L,Column:%c][%p%%] 
-
-"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\[HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
-
-" 设置insert模式和normal模式的状态栏颜色
-"au InsertEnter * hi StatusLine cterm=none ctermbg=yellow ctermfg=black
-"au InsertLeave * hi StatusLine cterm=none ctermfg=black ctermbg=green 
-
-"""""""""""""""""""
-"状态栏的设置 end
-"""""""""""""""""""
-
 " 退出插入模式时自动保存文件
 au InsertLeave * write
 
@@ -110,14 +109,6 @@ set cursorcolumn
 hi CursorColumn cterm=NONE ctermbg=black ctermfg=none guibg=NONE guifg=NONE
 
 
-"设置中文提示
-language messages zh_CN.utf-8 
-"设置中文帮助
-set helplang=cn
-
-
-" python和c语言规定一行不超过80个字符，当超过时用红色方块标出
-" au BufRead,BufNewFile *.c,*.cpp,*.py match Error /\%80v.\%81v./
 " python和c语言规定一行不超过80个字符，当超过时用下划线标出
 au BufRead,BufNewFile *.c,*.cpp,*.py 2match Underlined /.\%81v/
 
@@ -130,20 +121,6 @@ map <Left> <Nop>
 map <Right> <Nop>
 map <Up> <Nop>
 map <Down> <Nop>
-
-" gvim设置
-if has('gui_running')
-    set guioptions-=m " 隐藏菜单栏
-    set guioptions-=T " 隐藏工具栏
-    set guioptions-=L " 隐藏左侧滚动条
-    set guioptions-=r " 隐藏右侧滚动条
-    set guioptions-=b " 隐藏底部滚动条
-    set showtabline=0 " 隐藏Tab栏
-    colorscheme molokai
-    set guifont=Source\ Code\ Pro\ for\ Powerline\ Regular\ 11
-    set mouse=a
-endif
-
 
 
 " 设置折叠方式(manual, indent, expr, syntax, diff, marker)
@@ -174,24 +151,10 @@ map <C-h> <C-W>h
 map <C-l> <C-W>l
 
 
-" vim <Tab>等字符显示设置，为了精确控制文本编辑
-"set list
-"set listchars=tab:➢\ ,trail:·,eol:⏎,precedes:«,extends:»
-
-
 " 自动切换到当前目录
 set autochdir
 autocmd BufEnter * silent! !cd %:p:h
 
-
-
-""""""""""""""""""""""""""""""
-" Tagbar settings
-""""""""""""""""""""""""""""""
-
-nmap <silent> <F3> :TagbarToggle<CR>  
-let g:tagbar_ctags_bin = 'ctags'  
-let g:tagbar_width = 20
 
 
 """"""""""""""""""""""""""""""
@@ -240,148 +203,6 @@ nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 
-" 设置fcitx.vim 的延时,否则会有明显的卡顿
-set ttimeoutlen=10
-
-
-
-"""""""""""""""""""""""""""""""""""
-" airline settings
-"""""""""""""""""""""""""""""""""""
-let g:airline_theme='powerlineish'  
-" 使用powerline打过补丁的字体  
-let g:airline_powerline_fonts=1  
-if !exists('g:airline_symbols')  
-    let g:airline_symbols={}  
-endif  
-" 关闭空白符检测  
-let g:airline#extensions#whitespace#enabled=0
-
-
-"打开tabline功能,方便查看Buffer和切换,省去了minibufexpl插件
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-"设置切换Buffer快捷键"
-nmap <C-Tab> :bn<CR>
-nmap <C-S-Tab> :bp<CR>
-
-
-" powerline symbols
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
-
-
-""""""""""""""""""""""
-"快速编译和运行文件
-""""""""""""""""""""""
-map <F5> :call CompileRunGcc()<CR>
-func! CompileRunGcc()
-    exec "w"
-    if &filetype == 'c'
-        exec "!g++ % -o %<"
-        exec "!time ./%<"
-    elseif &filetype == 'cpp'
-        exec "!g++ % -o %<"
-        exec "!time ./%<"
-    elseif &filetype == 'java'
-        exec "!javac %"
-        exec "!time java %<"
-    elseif &filetype == 'sh'
-        :!time bash %
-    elseif &filetype == 'python'
-        exec "!time python3 %"
-    elseif &filetype == 'html'
-        exec "!opera % "
-    elseif &filetype == 'markdown'
-        exec "!opera % "
-    endif
-endfunc
-
-
-" 新文件
-" 新建.c,.h,.sh,.java文件，自动插入文件头 
-autocmd BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py exec ":call SetTitle()" 
-" 定义函数SetTitle，自动插入文件头 
-func SetTitle() 
-	if &filetype == 'sh' 
-		call setline(1,"\#!/bin/bash") 
-		call append(line("."), "") 
-    elseif &filetype == 'python'
-        call setline(1,"#! /usr/bin/ python3")
-        call append(line("."),"# -*- coding: utf-8 -*-")
-	    call append(line(".")+1, "")
-    elseif &filetype == 'markdown'
-        call setline(1,"# ".expand("%"))
-	else 
-		call setline(1, "/*************************************************************************") 
-		call append(line("."), "	> File Name: ".expand("%")) 
-		call append(line(".")+1, "	> Author: ") 
-		call append(line(".")+2, "	> Mail: ") 
-		call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
-		call append(line(".")+4, "	> Description: ") 
-		call append(line(".")+5, " ************************************************************************/") 
-		call append(line(".")+6, "")
-	endif
-	if expand("%:e") == 'cpp'
-		call append(line(".")+7, "#include <iostream>")
-		call append(line(".")+8, "using namespace std;")
-		call append(line(".")+9, "")
-		call append(line(".")+10,"int main(int argc, char *argv[])")
-		call append(line(".")+11,"{")
-		call append(line(".")+12,"")
-		call append(line(".")+13,"    return 0;")
-		call append(line(".")+14,"}")
-		call append(line(".")+15,"")
-	endif
-	if &filetype == 'c'
-		call append(line(".")+7, "#include <stdio.h>")
-		call append(line(".")+8, "")		
-		call append(line(".")+9,"int main(int argc, char *argv[])")
-		call append(line(".")+10,"{")
-		call append(line(".")+11,"")
-		call append(line(".")+12,"    return 0;")
-		call append(line(".")+13,"}")
-		call append(line(".")+14,"")
-
-	endif
-	if expand("%:e") == 'h'
-		call append(line(".")+7, "#ifndef _".toupper(expand("%:r"))."_H_")
-		call append(line(".")+8, "#define _".toupper(expand("%:r"))."_H_")
-		call append(line(".")+9, "#endif")
-	endif
-	if &filetype == 'java'
-		call append(line(".")+7,"public class ".expand("%:r"))
-		call append(line(".")+8,"")
-	endif
-	" 新建文件后，自动定位到文件末尾
-endfunc 
-autocmd BufNewFile * normal G
-
-
-
-
-
-
-"--ctags setting--
-" 按下F5重新生成tag文件，并更新taglist
-"map <F4> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-"imap <F6> <ESC>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
-
-" 打开c相关的文件时自动生成tags文件，BufReadPre 是打开已经存在的文件
-"autocmd BufReadPre *.cpp,*.h,*.c exec ":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>" 
-"set tags=tags
-"set tags+=./tags 
-
-
-
-
 
 "Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
 " Disable AutoComplPop.
@@ -396,11 +217,11 @@ let g:neocomplete#sources#syntax#min_keyword_length = 3
 " Define dictionary.
 let g:neocomplete#sources#dictionary#dictionaries = {
     \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions',
-	\ 'python' : '~/.vim/dict/python.dict',
-	\ 'c' : '~/.vim/dict/c.dict',
-    \ 'cpp' : '~/.vim/dict/cpp.dict',
+    \ 'vimshell' : '~/vimfiles/.vimshell_hist',
+    \ 'scheme' : '~/vimfiles/.gosh_completions',
+	\ 'python' : '~/vimfiles/dict/python.dict',
+	\ 'c' : '~/vimfiles/dict/c.dict',
+    \ 'cpp' : '~/vimfiles/dict/cpp.dict',
         \ }
 
 " Define keyword.
@@ -473,41 +294,6 @@ endif
 let g:jedi#show_call_signatures = "0"   " 补全时不弹出函数的参数列表框
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" cscope setting
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 0 或 s	查找本 C 符号(可以跳过注释)
-" 1 或 g	查找本定义
-" 2 或 d	查找本函数调用的函数
-" 3 或 c	查找调用本函数的函数
-" 4 或 t	查找本字符串
-" 6 或 e	查找本 egrep 模式
-" 7 或 f	查找本文件
-" 8 或 i	查找包含本文件的文件
-" find . –name "*.py" > cscope.files cscope生成python文件的索引
-if has("cscope")
-  set csprg=/usr/bin/cscope
-  set csto=1
-  set cst
-  set nocsverb
-  " add any database in current directory
-  if filereadable("cscope.out")
-      cs add cscope.out
-  endif
-  set csverb
-endif
-
-nmap <C-@>s :cs find s <C-R>=expand("<cword>")<CR><CR>  
-nmap <C-@>g :cs find g <C-R>=expand("<cword>")<CR><CR>  
-nmap <C-@>c :cs find c <C-R>=expand("<cword>")<CR><CR>  
-nmap <C-@>t :cs find t <C-R>=expand("<cword>")<CR><CR>  
-nmap <C-@>e :cs find e <C-R>=expand("<cword>")<CR><CR>  
-nmap <C-@>f :cs find f <C-R>=expand("<cfile>")<CR><CR>  
-nmap <C-@>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR> 
-nmap <C-@>d :cs find d <C-R>=expand("<cword>")<CR><CR>  
-nmap <C-@>w :w<CR>:!cscope -bqR<CR><CR>  
-
-
 """"""""""""""""""""""""""""
 " easymotion settings
 """"""""""""""""""""""""""""
@@ -545,15 +331,6 @@ let g:bookmark_center = 1
 
 
 
-
-""""""""""""""""""""""""""""
-" YankRing settings
-""""""""""""""""""""""""""""
-let g:yankring_history_dir = $HOME.'/.vim/'
-let g:yankring_history_file = '.yankring_history'
-nnoremap <silent> <F4> :YRShow<CR>
-
-
 """"""""""""""""""""""""""""
 " vim-multiple-cursors settings
 """"""""""""""""""""""""""""
@@ -563,6 +340,17 @@ let g:multi_cursor_next_key='<C-m>'
 let g:multi_cursor_prev_key='<C-p>'
 let g:multi_cursor_skip_key='<C-x>'
 let g:multi_cursor_quit_key='<Esc>'
+let g:bookmark_auto_save_file = '~/vimfiles'
 
 
-
+"YankRing
+"将yankring的历史文件夹移到~/.vim
+let g:yankring_history_dir = '~/vimfiles/'
+"修改历史文件名
+let g:yankring_history_file = '.yankring_history'
+"<leader>m选择上一个复制的文本
+let g:yankring_replace_n_pkey = '<Leader>m'
+"<leader>n选择下一个复制的文本
+let g:yankring_replace_n_pkey = '<Leader>n'
+"<leader>y显示yankring中的内容
+nmap <Leader>y :YRShow<CR>
